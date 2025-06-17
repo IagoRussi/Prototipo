@@ -1,26 +1,11 @@
+package src.main;
 import java.util.Scanner;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import src.main.utils.PalavrasChave;
+
 public class FakeNewsDetector {
-
-    private static final String[] PALAVRAS_SENSACIONALISTAS = {
-            "URGENTE", "CHOCANTE", "INACREDITAVEL"
-    };
-
-    private static final String[] PALAVRAS_SUSPEITAS = {
-            "médicos comprovam", "segredo relevado"
-    };
-
-    private static final String[] DOMINIOS_CONFIAVEIS = {
-            "g1.globo.com", "folha.uol.com.br", "estadao.com.br",
-            "bbc.com", "cnn.com"
-    };
-
-    private static final String[] DOMINIOS_SUSPEITOS = {
-            "blogspot", "wordpress", ".tk", ".ml"
-    };
 
     public static void main(String[] args) {
 
@@ -44,6 +29,7 @@ public class FakeNewsDetector {
             System.out.println(analisarTecnica(documento, tempoCarregamento));
 
             int pontosFinais = analisarDominio(documento.location()) + analisarTecnica(documento, tempoCarregamento) + analisarTitulo(documento.title());
+            System.out.println(pontosFinais);
             if (pontosFinais > 60) {
                 System.out.println("Site Confiavel");
                 
@@ -61,7 +47,7 @@ public class FakeNewsDetector {
 
         int pontos = 0;
 
-        for (String confiavel : DOMINIOS_CONFIAVEIS) {
+        for (String confiavel : PalavrasChave.DOMINIOS_CONFIAVEIS) {
             if (url.contains(confiavel)) {
                 System.out.println("Domínio Confiavel +30 pontos");
                 pontos += 30;
@@ -69,7 +55,7 @@ public class FakeNewsDetector {
             }
         }
 
-        for (String suspeito : DOMINIOS_SUSPEITOS) {
+        for (String suspeito : PalavrasChave.DOMINIOS_SUSPEITOS) {
             if (url.contains(suspeito)) {
                 pontos -= 30;
 
@@ -91,6 +77,7 @@ public class FakeNewsDetector {
             String urlLimpa = url.replace("https://", "").replace("http://", "");
             // Pega só a parte antes da primeira /
             dominio = urlLimpa.split("/")[0];
+            System.out.println(dominio);
 
             // Verificar tamanho do domínio
             if (dominio.length() > 30) {
@@ -128,7 +115,7 @@ public class FakeNewsDetector {
 
         double percentual = (double) letrasMaiusculas / totalLetras * 100;
 
-        if (titulo.length() > 80) {
+        if (titulo.length() > 200) {
             System.out.println("Título muito longo (" + titulo.length() + " caracteres): -5 pontos");
             pontosTitulo -= 5;
 
@@ -139,7 +126,7 @@ public class FakeNewsDetector {
             pontosTitulo -= 10;
         }
 
-        for (String sensac : PALAVRAS_SENSACIONALISTAS) {
+        for (String sensac : PalavrasChave.SENSACIONALISTAS) {
             if (titulo.contains(sensac)) {
                 System.out.println("Título Sensacionalista");
                 pontosTitulo -= 30;
@@ -164,7 +151,7 @@ public class FakeNewsDetector {
 
         }
 
-        for (String palavra : PALAVRAS_SUSPEITAS) {
+        for (String palavra : PalavrasChave.SUSPEITAS) {
             if (texto.toLowerCase().contains(palavra)) {
                 System.out.println("Palavra suspeita '" + palavra + "': -5 pontos");
                 pontosConteudo -= 5;
@@ -199,7 +186,7 @@ public class FakeNewsDetector {
         }
 
         int adsCount = doc.select("[class*=ad], [id*=ad]").size();
-        if (adsCount > 100) {
+        if (adsCount > 200) {
             System.out.println("Excesso de anúncios: -10 pontos");
             pontosTecnica -= 10;
         }
