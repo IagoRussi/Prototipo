@@ -1,20 +1,21 @@
-package src.main;
+
 import java.util.Scanner;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
-import src.main.utils.PalavrasChave;
+import utils.PalavrasChave;
+import analisadores.*;
 
 public class FakeNewsDetector {
 
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
+        AnalisarDominio analiseDominio = new AnalisarDominio();
 
         System.out.println("=== Detector de Fake News ===");
 
         System.out.println("Digite a URL do seu site para analisarmos: ");
-        String url = input.nextLine();
+        /*String url = input.nextLine();
 
         try {
             Document documento = Jsoup.connect(url).get();
@@ -191,6 +192,10 @@ public class FakeNewsDetector {
             pontosTecnica -= 10;
         }
 
-        return pontosTecnica;
+        return pontosTecnica;*/
+
+        System.out.println(analiseDominio.getInfoWhois("google.com"));
+        input.close();
     }
+
 }

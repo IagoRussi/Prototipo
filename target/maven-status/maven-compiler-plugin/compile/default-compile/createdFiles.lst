@@ -1,0 +1,6 @@
+analisadores\AnalisarConteudo.class
+analisadores\AnalisarTitulo.class
+analisadores\AnalisarDominio.class
+FakeNewsDetector.class
+utils\PalavrasChave.class
+analisadores\AnalisarTecnico.class
